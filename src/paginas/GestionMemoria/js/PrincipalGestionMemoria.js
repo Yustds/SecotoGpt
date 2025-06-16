@@ -1,8 +1,3 @@
-/**
- * JavaScript específico para la página de Gestión de Memoria
- * Funcionalidades: animaciones y efectos de página en desarrollo
- */
-
 class GestionMemoriaManager {
   constructor() {
     this.initialized = false;
@@ -10,277 +5,46 @@ class GestionMemoriaManager {
   }
 
   async init() {
-    console.log('🧠 Inicializando Gestión de Memoria Manager...');
-    
-    // Esperar a que los componentes se carguen
-    await this.waitForComponents();
-    
-    // Inicializar funcionalidades específicas para página en desarrollo
-    this.initializeDevelopmentPage();
-    this.initializeDevelopmentAnimations();
-    this.initializeButtonInteractions();
+    console.log('🧠 Inicializando Gestión de Memoria...');
+    await this.waitForHeaderFooter();
+    this.initializeScrollAnimations();
     this.removeLoadingClass();
-    
     this.initialized = true;
-    console.log('✅ Gestión de Memoria Manager inicializado - Página en Desarrollo');
   }
 
-  async waitForComponents() {
-    let attempts = 0;
-    const maxAttempts = 50;
-    
-    while (attempts < maxAttempts) {
+  async waitForHeaderFooter() {
+    let tries = 0;
+    while (tries < 30) {
       const header = document.querySelector('#header-placeholder .modern-header');
       const footer = document.querySelector('#footer-placeholder .footer-modern');
-      
-      if (header && footer) {
-        console.log('✅ Componentes cargados correctamente');
-        return;
-      }
-      
-      await new Promise(resolve => setTimeout(resolve, 100));
-      attempts++;
-    }
-    
-    console.warn('⚠️ Componentes tardaron en cargar, continuando...');
-  }
-
-  initializeDevelopmentPage() {
-    console.log('🔧 Inicializando página de desarrollo...');
-    
-    // Verificar que existe la sección de desarrollo
-    const developmentSection = document.querySelector('.development-section');
-    if (developmentSection) {
-      console.log('✅ Sección de desarrollo encontrada');
-      
-      // Hacer visible la sección inmediatamente
-      developmentSection.style.opacity = '1';
-      developmentSection.style.transform = 'translateY(0)';
-      
-      // Agregar efecto de entrada
-      setTimeout(() => {
-        developmentSection.classList.add('animate__animated', 'animate__fadeInUp');
-      }, 300);
-    } else {
-      console.warn('⚠️ Sección de desarrollo no encontrada');
+      if (header && footer) return;
+      await new Promise(res => setTimeout(res, 100));
+      tries++;
     }
   }
 
-  initializeDevelopmentAnimations() {
-    console.log('🎨 Inicializando animaciones de desarrollo...');
-    
-    // Animar el icono principal
-    const developmentIcon = document.querySelector('.development-icon');
-    if (developmentIcon) {
-      // Agregar efecto hover adicional
-      developmentIcon.addEventListener('mouseenter', () => {
-        developmentIcon.style.transform = 'scale(1.1) rotate(10deg)';
-        developmentIcon.style.filter = 'drop-shadow(0 0 20px rgba(25, 135, 84, 0.8))';
+  initializeScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          observer.unobserve(entry.target);
+        }
       });
-      
-      developmentIcon.addEventListener('mouseleave', () => {
-        developmentIcon.style.transform = '';
-        developmentIcon.style.filter = '';
-      });
-    }
+    }, { threshold: 0.1 });
 
-    // Animar la tarjeta de desarrollo
-    const developmentCard = document.querySelector('.development-card');
-    if (developmentCard) {
-      // Efecto de entrada retrasado
-      setTimeout(() => {
-        developmentCard.style.transform = 'translateY(0)';
-        developmentCard.style.opacity = '1';
-      }, 500);
-
-      // Efecto parallax sutil al hacer scroll
-      window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = scrolled * 0.1;
-        developmentCard.style.transform = `translateY(${parallax}px)`;
-      });
-    }
-
-    // Animar elementos de progreso
-    const progressFill = document.querySelector('.development-progress-fill');
-    if (progressFill) {
-      setTimeout(() => {
-        progressFill.style.width = '65%';
-      }, 1000);
-    }
-  }
-
-  initializeButtonInteractions() {
-    console.log('🎯 Configurando interacciones de botones...');
-    
-    // Botón de volver atrás
-    const backButtons = document.querySelectorAll('[onclick*="history.back"]');
-    backButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log('🔙 Navegando hacia atrás');
-        
-        // Efecto visual antes de navegar
-        button.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          window.history.back();
-        }, 150);
-      });
-    });
-
-    // Botón de ir al inicio
-    const homeButtons = document.querySelectorAll('[onclick*="secotogpt.html"]');
-    homeButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log('🏠 Navegando al inicio');
-        
-        // Efecto visual antes de navegar
-        button.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          window.location.href = '../../../secotogpt.html';
-        }, 150);
-      });
-    });
-
-    // Agregar efectos hover a todos los botones de desarrollo
-    const developmentButtons = document.querySelectorAll('.btn-development');
-    developmentButtons.forEach(button => {
-      button.addEventListener('mouseenter', () => {
-        button.style.transform = 'translateY(-2px) scale(1.05)';
-      });
-      
-      button.addEventListener('mouseleave', () => {
-        button.style.transform = '';
-      });
-    });
+    document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
   }
 
   removeLoadingClass() {
-    console.log('🎬 Removiendo clase de carga...');
-    
-    // Remover clase de loading del body
     document.body.classList.remove('component-loading');
-    
-    // Asegurar que el contenido sea visible
-    const developmentSection = document.querySelector('.development-section');
-    if (developmentSection) {
-      developmentSection.style.opacity = '1';
-      developmentSection.style.transform = 'translateY(0)';
-      developmentSection.style.transition = 'all 0.8s ease';
-    }
-    
-    // Mostrar mensaje en consola
-    console.log('✅ Página de desarrollo visible y cargada correctamente');
-  }
-
-  // Método para debugging - verificar estado de elementos
-  debugPageState() {
-    console.log('🔍 Estado de la página:');
-    console.log('- Body classes:', document.body.classList.toString());
-    console.log('- Development section:', document.querySelector('.development-section') ? 'Existe' : 'No existe');
-    console.log('- Development card:', document.querySelector('.development-card') ? 'Existe' : 'No existe');
-    console.log('- Manager initialized:', this.initialized);
-  }
-
-  // Método para obtener información de desarrollo
-  getDevelopmentInfo() {
-    return {
-      page: 'Gestión de Memoria',
-      status: 'En desarrollo',
-      progress: '65%',
-      features: [
-        'Memoria física y virtual',
-        'Paginación y segmentación',
-        'Técnicas de optimización',
-        'Simuladores interactivos'
-      ]
-    };
+    const section = document.querySelector('.timeline-section');
+    if (section) section.style.opacity = '1';
   }
 }
 
-// CSS adicional para animaciones específicas de memoria
-const memoryCSS = `
-  @keyframes cardEntrance {
-    0% {
-      opacity: 0;
-      transform: translateY(50px) scale(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-  
-  @keyframes iconFloat {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  
-  @keyframes pulse {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.8);
-    }
-    50% {
-      opacity: 0.6;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-  }
-  
-  .development-section {
-    transition: all 0.8s ease;
-  }
-  
-  .component-loading .development-section {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  
-  body:not(.component-loading) .development-section {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const styleSheet = document.createElement('style');
-styleSheet.textContent = memoryCSS;
-document.head.appendChild(styleSheet);
-
-// Inicialización cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🏁 DOM cargado - Inicializando Gestión de Memoria (Desarrollo)');
-  
+window.addEventListener('DOMContentLoaded', () => {
   if (!window.gestionMemoriaManager) {
     window.gestionMemoriaManager = new GestionMemoriaManager();
   }
 });
-
-// Backup para asegurar inicialización
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!window.gestionMemoriaManager) {
-      console.log('🔄 Inicialización de respaldo');
-      window.gestionMemoriaManager = new GestionMemoriaManager();
-    }
-  });
-} else {
-  // DOM ya está cargado
-  console.log('🚀 DOM ya cargado - Inicializando inmediatamente');
-  if (!window.gestionMemoriaManager) {
-    window.gestionMemoriaManager = new GestionMemoriaManager();
-  }
-}
-
-// Export para compatibilidad
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = GestionMemoriaManager;
-}
