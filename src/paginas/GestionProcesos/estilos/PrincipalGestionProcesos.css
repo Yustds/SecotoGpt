@@ -1,0 +1,90 @@
+:root {
+  --proc-color: #0d6efd;
+  --proc-bg: #ffffff;
+  --proc-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+}
+
+body.gestionprocesos-page {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.hero-section h1 {
+  color: var(--proc-color);
+  font-weight: 700;
+  font-size: 2.5rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  color: #343a40;
+}
+
+.timeline-section {
+  padding-left: 2rem;
+  border-left: 4px solid var(--proc-color);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-left: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s ease;
+}
+
+.timeline-item.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -1.2rem;
+  top: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--proc-color);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+}
+
+.timeline-content {
+  background-color: var(--proc-bg);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: var(--proc-shadow);
+  border-left: 6px solid var(--proc-color);
+}
+
+.era-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--proc-color);
+  margin-bottom: 0.5rem;
+}
+
+.era-card p,
+.era-card ul li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #212529;
+}
+
+.era-card ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .timeline-section {
+    padding-left: 1rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.5rem;
+  }
+}
